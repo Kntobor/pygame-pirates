@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        # If keys are pressed than the vector self.direction is (1, 0)
+        # If keys are pressed than the vector self.direction is (1 or -1, 0)
         if keys[pygame.K_d]:
             self.direction.x = 1
         elif keys[pygame.K_a]:

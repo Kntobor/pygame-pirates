@@ -25,6 +25,17 @@ class Level:
                     playerSprite = Player((x, y))
                     self.player.add(playerSprite)
             
+    def scrollX(self):
+        player = self.player.sprite
+        playerX = player.rect.centerx
+        directionX = player.direction.x
+
+        if playerX < 200:
+            self.worldShift = 8
+            player.speed = 0        
+        elif playerX > 1000:
+            self.worldShift = -8
+            player.speed = 0
 
     def run(self):
         self.tiles.update(self.worldShift)
@@ -32,5 +43,7 @@ class Level:
 
         self.player.update()
         self.player.draw(self.displaySurface)
+
+        self.scrollX()
 
         
