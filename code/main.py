@@ -10,7 +10,7 @@ from level import Level
 pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption('Pygame Platformer')
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() 
 level = Level(levelMap, screen)
 
 # Event Loop

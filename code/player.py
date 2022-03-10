@@ -1,11 +1,13 @@
 import pygame
+from support import importFolder
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
-        
-        self.image = pygame.Surface((32, 64))
-        self.image.fill('red')
+        self.importAssets()
+        self.frameIndex = 0
+        self.animSpeed = 0.15
+        self.image = self.animations['idle'][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
 
         #Movement
@@ -16,8 +18,13 @@ class Player(pygame.sprite.Sprite):
         self.jumping = False
 
     def importAssets(self):
-        characterPath = '../graphic/character/'
-        self.animations = {'idle' : [], 'run' : [], 'jump' : [], 'fall' : []}
+        characterPath = '..\graphics\character'
+        self.animations = {'idle' : [], 'run' : [], 'jump' : [], 'fall' : []} # Name of categories matches folders
+
+        # Cycles through every animation type and imports the animation
+        for animation in self.animations.keys():
+            fullPath = characterPath + f'\{animation}'
+            self.animations[animation] = importFolder(fullPath)
 
     def input(self):
         keys = pygame.key.get_pressed()
