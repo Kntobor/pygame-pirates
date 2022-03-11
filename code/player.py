@@ -2,7 +2,7 @@ import pygame
 from support import importFolder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, pos, surface):
         super().__init__()
         self.importAssets()
         self.frameIndex = 0
@@ -23,6 +23,12 @@ class Player(pygame.sprite.Sprite):
         self.onRight = False
         self.onLeft = False
 
+        # Dust Particles
+        self.dustFrameIndex = 0
+        self.dustAnimSpeed = 0.15
+        self.displaySurface = surface
+
+
     def importAssets(self):
         characterPath = '..\graphics\character'
         self.animations = {'idle' : [], 'run' : [], 'jump' : [], 'fall' : []} # Name of categories matches folders
@@ -31,6 +37,9 @@ class Player(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             fullPath = characterPath + f'\{animation}'
             self.animations[animation] = importFolder(fullPath)
+
+    def importRunParticles(self):
+        self.runParticles = importFolder('D:\Code\pygame-pirates\graphics\character\dust_particles\run')
 
     def animate(self):
         animation = self.animations[self.status]
@@ -48,12 +57,25 @@ class Player(pygame.sprite.Sprite):
             self.image = flippedImage
         
         # Rectangle Adjustments
-        if self.onGround:
-            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
-        elif self.onCeiling:
-            self.rect = self.image.get_rect(midtop = self.rect.midtop)
-        else:
-            self.rect = self.image.get_rect(center = self.rect.center)
+        # if self.onGround:
+        #     self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+        # elif self.onCeiling:
+        #     self.rect = self.image.get_rect(midtop = self.rect.midtop)
+        # else:
+        #     self.rect = self.image.get_rect(center = self.rect.center)
+
+    def runDustAnimation(self):
+        if self.status == 'run':
+            self.dustFrameIndex += self.dustAnimSpeed
+            if self.dustFrameIndex >= len(self.runParticles):
+                self.dustFrameIndex = 0
+
+            dustParticle = self.dustRunParticles[int(self.dustFrameIndex)]
+
+            if self.facingRight:
+                self.displaySurface.blit(dustParticle, self.rect.bottomleft)
+            else:
+                self.displaySurface.blit(dustParticle, self.rect.bottomright)
 
     def input(self):
         keys = pygame.key.get_pressed()

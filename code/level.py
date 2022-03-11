@@ -22,7 +22,7 @@ class Level:
                     self.tiles.add(tile)
                 
                 if cell == 'P': # 'P' cell indicates player
-                    playerSprite = Player((x, y))
+                    playerSprite = Player((x, y), self.displaySurface)
                     self.player.add(playerSprite)
             
     def scrollX(self):
